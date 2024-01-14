@@ -1,20 +1,10 @@
 services:
-    llama-cpp-rocm:
-        image: llama-cpp-rocm
+    llama-cpp:
+        image: llama-cpp-cpu
         build:
-            dockerfile: rocm.Dockerfile
+            dockerfile: Dockerfile
             context: .
             network: host
-        devices:
-            - /dev/kfd
-            - /dev/dri
-        group_add:
-            - video
-        ipc: host
-        cap_add:
-            - SYS_PTRACE
-        security_opt:
-            - seccomp:unconfined
         volumes:
             - ~/ml/llm-models/:/models
         ports:
