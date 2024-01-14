@@ -1,0 +1,22 @@
+services:
+    llama-cpp-rocm:
+        image: llama-cpp-cpu
+        build:
+            dockerfile: cpu.Dockerfile
+            context: .
+            network: host
+        volumes:
+            - ~/ml/llm-models/:/models
+        ports:
+            - "8080:8080"
+        command:
+            - ./bin/server
+            - --host
+            - 0.0.0.0
+            - --gpu-layers
+            - "128"
+            - --ctx-size
+            - "4096"
+            - --model
+            - /models/openhermes-2.5-mistral-7b.Q6_K.gguf
+        stop_grace_period: 2s

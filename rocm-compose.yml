@@ -1,0 +1,32 @@
+services:
+    llama-cpp-rocm:
+        image: llama-cpp-rocm
+        build:
+            dockerfile: rocm.Dockerfile
+            context: .
+            network: host
+        devices:
+            - /dev/kfd
+            - /dev/dri
+        group_add:
+            - video
+        ipc: host
+        cap_add:
+            - SYS_PTRACE
+        security_opt:
+            - seccomp:unconfined
+        volumes:
+            - ~/ml/llm-models/:/models
+        ports:
+            - "8080:8080"
+        command:
+            - ./bin/server
+            - --host
+            - 0.0.0.0
+            - --gpu-layers
+            - "128"
+            - --ctx-size
+            - "4096"
+            - --model
+            - /models/openhermes-2.5-mistral-7b.Q6_K.gguf
+        stop_grace_period: 2s

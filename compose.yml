@@ -1,0 +1,31 @@
+services:
+    llama-cpp:
+        image: llama-cpp
+        container_name: llama-cpp
+        build:
+            dockerfile: Dockerfile
+            context: .
+        volumes:
+            - /mnt/ml/llm-models:/models
+        ports:
+            - 8010:8010
+        command:
+            - ./bin/server
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8010"
+            - --gpu-layers
+            - "128"
+            - --ctx-size
+            - "8192"
+            - --model
+            - /models/openhermes-2.5-mistral-7b.Q6_K.gguf
+        stop_grace_period: 2s
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          capabilities: [gpu]
+                          device_ids: ['0']
