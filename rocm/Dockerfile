@@ -33,7 +33,7 @@ RUN pip install --upgrade pip setuptools wheel --no-cache-dir
 
 # Get Llama.cpp
 ADD https://api.github.com/repos/ggerganov/llama.cpp/git/refs/heads/master version.json
-RUN git clone https://github.com/ggerganov/llama.cpp.git /app
+RUN git clone --depth=1 https://github.com/ggerganov/llama.cpp.git /app
 WORKDIR /app
 RUN pip install -r requirements.txt
 
@@ -49,5 +49,6 @@ RUN mkdir build
 WORKDIR build
 RUN cmake .. -DLLAMA_HIPBLAS=ON
 RUN cmake --build . --config Release
+WORKDIR bin
 
 #ENTRYPOINT ["/app/.devops/tools.sh"]
